@@ -1,0 +1,493 @@
+
+/* ==========================================================================
+   1. Base Styles & Variables (Deep Cosmic Modernist)
+   ========================================================================== */
+:root {
+  --bg-primary: #020617;    
+  --bg-secondary: #0f172a;     
+  --text-main: #f8fafc;         
+  --text-muted: #64748b;       
+  --accent-blue: #38bdf8;     
+  --accent-crimson: #f43f5e;    
+  --grid-border: rgba(56, 189, 248, 0.08); 
+  --transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   2. Header & Navigation (Monolithic & Floating)
+   ========================================================================== */
+.mainHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.75rem 8%;
+  background-color: rgba(2, 6, 23, 0.85);
+  border-bottom: 1px solid var(--grid-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+}
+
+.imgLogo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+.mainHeader nav ul {
+  display: flex;
+  list-style: none;
+  gap: 3.5rem;
+}
+
+.mainHeader nav a {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: var(--transition);
+}
+
+.mainHeader nav a:hover {
+  color: var(--accent-blue);
+}
+
+/* ==========================================================================
+   3. Hero Section (Stark Typographic Void)
+   ========================================================================== */
+/* ==========================================================================
+   3. Hero Section (Two-Column Asymmetric Grid)
+   ========================================================================== */
+.simple-what-is {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr; 
+  gap: 4rem;
+  align-items: center;
+  padding: 6rem 8%;
+  border-bottom: 1px solid var(--grid-border);
+  background: radial-gradient(circle at 8% 20%, #0f172a 0%, #020617 70%);
+}
+
+.hero-text-block {
+  text-align: left;
+}
+
+.simple-what-is span {
+  display: inline-block;
+  font-size: 6.5rem;
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.simple-what-is span:nth-of-type(1) {
+  color: var(--text-main);
+}
+
+.simple-what-is span:nth-of-type(2) {
+  color: var(--accent-crimson);
+}
+
+.simple-what-is p {
+  max-width: 520px;
+  margin: 2.5rem 0;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  line-height: 1.65;
+}
+
+.simple-what-is button {
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--text-main);
+  padding: 1rem 2.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.simple-what-is button:hover {
+  background-color: var(--text-main);
+  color: var(--bg-primary);
+}
+
+/* Fluid Video Container maintaining 16:9 ratio */
+.vidContainer {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; 
+  height: 0;
+  border: 1px solid var(--grid-border); 
+}
+
+.vidContainer iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ==========================================================================
+   5. Responsive Structural Shifts
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .simple-what-is span {
+    font-size: 5rem;
+  }
+  
+  .simple-what-is {
+    gap: 2.5rem;
+  }
+}
+
+/* When screen gets tight, drop side-by-side and stack text cleanly over video */
+@media (max-width: 900px) {
+  .mainHeader {
+    padding: 1.5rem 6%;
+  }
+
+  .mainHeader nav ul {
+    gap: 2rem;
+  }
+
+  /* Transform hero column layout into single stacked layout */
+  .simple-what-is {
+    grid-template-columns: 1fr;
+    padding: 6rem 6% 4rem 6%;
+    gap: 3rem;
+  }
+
+  .simple-what-is span {
+    font-size: 4.5rem;
+  }
+
+  .container {
+    grid-template-columns: 1fr; 
+  }
+
+  .what-is-newton-div, 
+  .why-newton-div, 
+  .what-is-here-div {
+    border-right: none;
+    border-bottom: 1px solid var(--grid-border);
+    padding: 4rem 6%;
+  }
+}
+
+@media (max-width: 600px) {
+  .mainHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.5rem 6%;
+  }
+
+  .mainHeader nav ul {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .simple-what-is span {
+    display: block; 
+    font-size: 3.5rem;
+  }
+
+  .simple-what-is button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .what-is-newton-div, 
+  .why-newton-div, 
+  .what-is-here-div {
+    padding: 3.5rem 6%;
+  }
+}
+/* ==========================================================================
+   4. Content Grid (Infinite Structural Blocks)
+   ========================================================================== */
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0;
+  max-width: 100%;
+}
+
+.what-is-newton-div, 
+.why-newton-div, 
+.what-is-here-div {
+  padding: 5rem 10%;
+  border-right: 1px solid var(--grid-border);
+  border-bottom: 1px solid var(--grid-border);
+  background-color: transparent;
+  transition: var(--transition);
+}
+
+.what-is-here-div {
+  border-right: none;
+}
+
+/* Subtle reveal effect on hover without destroying the flat modernist layout */
+.what-is-newton-div:hover, 
+.why-newton-div:hover, 
+.what-is-here-div:hover {
+  background-color: rgba(15, 23, 42, 0.3);
+}
+
+.container h2 {
+  color: var(--text-main);
+  margin-bottom: 2rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.container p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+/* ==========================================================================
+   6. Footer Styles (Modernist Baseline)
+   ========================================================================== */
+footer {
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--grid-border);
+  padding: 4rem 8%;
+}
+
+.footerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3rem;
+  max-width: 100%;
+}
+
+.footerContainer p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 500px;
+  letter-spacing: -0.01em;
+}
+
+.footerContainer a {
+  text-decoration: none;
+  display: inline-block;
+  transition: var(--transition);
+}
+
+.footerContainer a span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px dashed var(--text-muted);
+  padding-bottom: 2px;
+  transition: var(--transition);
+}
+
+/* Hover interaction */
+.footerContainer a:hover span {
+  color: var(--accent-blue);
+  border-bottom-color: var(--accent-blue);
+}
+
+/* ==========================================================================
+   Responsive Adjustments for Footer
+   ========================================================================== */
+@media (max-width: 900px) {
+  footer {
+    padding: 3rem 6%;
+  }
+}
+
+@media (max-width: 600px) {
+  .footerContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  
+  .footerContainer p {
+    font-size: 0.85rem;
+  }
+  
+  .footerContainer a {
+    width: 100%;
+  }
+}
+/* ==========================================================================
+   5. Consolidated Responsive Fixes (Prevents Horizontal Scroll)
+   ========================================================================== */
+
+/* Medium Screens & Small Laptops */
+@media (max-width: 1100px) {
+  .simple-what-is {
+    padding: 6rem 6%;
+    gap: 2rem;
+  }
+
+  .simple-what-is span {
+    font-size: 5rem;
+  }
+
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .what-is-newton-div, 
+  .why-newton-div, 
+  .what-is-here-div {
+    padding: 4rem 5%;
+  }
+
+  footer {
+    padding: 4rem 6%;
+  }
+}
+
+/* Tablets & Landscape Mobile (Stack Layouts Elegantly) */
+@media (max-width: 900px) {
+  .mainHeader {
+    padding: 1.5rem 6%;
+  }
+
+  .mainHeader nav ul {
+    gap: 2rem;
+  }
+
+  /* Force Hero row layout instead of side-by-side columns */
+  .simple-what-is {
+    grid-template-columns: 1fr;
+    padding: 5rem 6%;
+    gap: 3rem;
+  }
+
+  .simple-what-is span {
+    font-size: 4.5rem;
+  }
+
+  .simple-what-is p {
+    max-width: 100%; /* Allows paragraph to fluidly wrap */
+  }
+
+  /* Structural shift to 1 column rows */
+  .container {
+    grid-template-columns: 1fr; 
+  }
+
+  .what-is-newton-div, 
+  .why-newton-div, 
+  .what-is-here-div {
+    border-right: none;
+    border-bottom: 1px solid var(--grid-border);
+    padding: 4rem 6%;
+  }
+}
+
+/* Portrait Smartphones (Max Width Constraints) */
+@media (max-width: 600px) {
+  /* Prevent header items from expanding past viewport margins */
+  .mainHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.5rem 6%;
+  }
+.title{
+  display: flex;
+}
+.vidContainer{
+  display: none;
+}
+  .mainHeader nav {
+    width: 100%;
+  }
+
+  .mainHeader nav ul {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .mainHeader nav a {
+    font-size: 0.8rem;
+  }
+
+  .simple-what-is {
+    padding: 4rem 6%;
+    gap: 2rem;
+  }
+
+  /* Safely wrap letters to prevent title breaking screen boundaries */
+  .simple-what-is span {
+    display: block; 
+    font-size: 3.5rem;
+    word-break: break-word; 
+  }
+
+  .simple-what-is p {
+    font-size: 1.1rem;
+    margin: 1.5rem 0;
+  }
+
+  .simple-what-is button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .what-is-newton-div, 
+  .why-newton-div, 
+  .what-is-here-div {
+    padding: 3rem 6%;
+  }
+
+  .container h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Safely stack footer elements vertically */
+  .footerContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .footerContainer p {
+    font-size: 0.85rem;
+    max-width: 100%;
+  }
+  
+  .footerContainer a {
+    width: 100%;
+  }
+}
