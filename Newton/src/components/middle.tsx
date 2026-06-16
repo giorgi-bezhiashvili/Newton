@@ -12,25 +12,15 @@ function middle() {
               ისწავლე ფიზიკა, მარტივად ახსნილი თემებით , ორგანიზებული
               გაკვეთილებით და სკოლის პროექტებით
             </p>
-            <button>პროექტები ➜</button>
+            <button type="button">პროექტები ➜</button>
           </div>
 
           <div className="vidContainer">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/ZAqIoDhornk?si=uXwF84g_fYqT_dkU"
-              className="ytVideo"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
+            <iframe width="560" height="315" sandbox="allow-scripts allow-same-origin allow-popups" src="https://www.youtube.com/embed/K0SwpS324d8?si=wOGhIsdV6E23Xk7T" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen className="ytVideo"></iframe>
           </div>
         </div>
 
-        {/* Three-column container positioned strictly below the video area */}
+        {}
         <div className="container">
           <div className="what-is-newton-div">
             <h2>რა არის ნიუტონი</h2>
