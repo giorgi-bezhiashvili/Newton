@@ -3,4 +3,6 @@ export interface CardData {
   topic: string;
   equation: string;
   grade:number;
+  url:string;
+  urlName:string;
 }

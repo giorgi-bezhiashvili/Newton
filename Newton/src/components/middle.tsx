@@ -12,7 +12,7 @@ function middle() {
               ისწავლე ფიზიკა, მარტივად ახსნილი თემებით , ორგანიზებული
               გაკვეთილებით და სკოლის პროექტებით
             </p>
-            <button type="button">პროექტები ➜</button>
+            <a href="/projects"><button type="button">პროექტები ➜</button></a>
           </div>
 
           <div className="vidContainer">
