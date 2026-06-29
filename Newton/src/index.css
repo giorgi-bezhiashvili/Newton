@@ -1,741 +1,644 @@
-/* ==========================================================================
-   1. Base Styles & Variables (Deep Cosmic Modernist)
-   ========================================================================== */
+/* ─────────────────────────────────────────────
+   Newton — Aurora Theme (refined)
+   Deep midnight bg · cyan→indigo accents · soft glow
+   Drop-in replacement: same class names as before
+   Covers: Header, Footer, MainPage, SecondPage
+   ───────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* ── Design Tokens ── */
 :root {
-  --bg-primary: #020617;
-  --bg-secondary: #0f172a;
-  --text-main: #f8fafc;
-  --text-muted: #64748b;
-  --accent-blue: #38bdf8;
-  --accent-crimson: #f43f5e;
-  --grid-border: rgba(56, 189, 248, 0.08);
-  --transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Surfaces — cooler, deeper midnight with a hint of indigo */
+  --space-0:   #0a0e17;   /* page bg */
+  --space-1:   #111726;   /* card bg */
+  --space-2:   #18202f;   /* elevated surface */
+  --space-3:   #283346;   /* borders */
+  --space-4:   #3c4a63;   /* muted borders */
+
+  /* Accents — electric cyan/indigo duo */
+  --blue-glow:     #56c2ff; /* accent / links (cyan) */
+  --blue-mid:      #4f7dff; /* buttons (indigo) */
+  --blue-press:    #3b5bdb; /* pressed */
+  --blue-subtle:   #15233d; /* tinted bg */
+  --cyan:          #38e0d0; /* secondary accent */
+
+  /* Text */
+  --text-primary:   #f0f4fb;
+  --text-secondary: #9aa7bd;
+  --text-muted:     #5a6781;
+
+  /* Gradients (subtle, analogous cyan→indigo only) */
+  --grad-accent: linear-gradient(135deg, #4f7dff 0%, #38c8e0 100%);
+  --grad-text:   linear-gradient(120deg, #ffffff 0%, #8fb6ff 60%, #56e0d0 100%);
+
+  /* Fonts */
+  --ff-display: 'Space Grotesk', system-ui, sans-serif;
+  --ff-body:    'Inter', system-ui, sans-serif;
+
+  /* Radii */
+  --radius-sm:  8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  /* Shadows */
+  --shadow-glow: 0 0 0 1px rgba(79, 125, 255, 0.35), 0 8px 30px rgba(56, 200, 224, 0.12);
+
+  --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family:
-    "Inter",
-    system-ui,
-    -apple-system,
-    sans-serif;
-  letter-spacing: -0.02em;
-}
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-main);
-  line-height: 1.5;
+  font-family: var(--ff-body);
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(79, 125, 255, 0.10), transparent 60%),
+    radial-gradient(900px 500px at 0% 0%, rgba(56, 224, 208, 0.06), transparent 55%),
+    var(--space-0);
+  background-attachment: fixed;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
-/* ==========================================================================
-   2. Header & Navigation (Monolithic & Floating)
-   ========================================================================== */
+/* Selection */
+::selection { background: rgba(79, 125, 255, 0.35); color: #fff; }
+
+/* ════════════════════════════════════════════
+   HEADER
+   ════════════════════════════════════════════ */
+
 .mainHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 6%;
-  background-color: var(--bg-secondary); /* Matches your deep cosmic theme */
-  border-bottom: 1px solid var(--grid-border);
-  position: relative;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 64px;
+  background: rgba(17, 23, 38, 0.72);
+  backdrop-filter: saturate(160%) blur(12px);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid var(--space-3);
+  position: sticky;
+  top: 0;
   z-index: 100;
 }
 
 .imgLogo {
-  height: 45px;
+  height: 40px;
   width: auto;
   display: block;
+  transition: transform var(--transition), filter var(--transition);
 }
 
-/* Desktop layout rules */
-.navMenu {
-  display: block;
+.imgLogo:hover {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 10px rgba(86, 194, 255, 0.45));
 }
+
+.navMenu { display: flex; }
 
 .navList {
   display: flex;
+  gap: 0.25rem;
   list-style: none;
-  gap: 2.5rem;
-  margin: 0;
-  padding: 0;
 }
 
 .navList a {
-  text-decoration: none;
-  color: var(--text-muted);
+  position: relative;
+  display: block;
+  padding: 0.45rem 0.9rem;
+  font-family: var(--ff-body);
+  font-size: 0.9rem;
   font-weight: 500;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  transition: var(--transition);
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition), color var(--transition);
+}
+
+.navList a::after {
+  content: "";
+  position: absolute;
+  left: 0.9rem;
+  right: 0.9rem;
+  bottom: 0.25rem;
+  height: 2px;
+  background: var(--grad-accent);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
 }
 
 .navList a:hover {
-  color: var(--accent-blue);
+  background: var(--space-2);
+  color: var(--text-primary);
 }
 
-/* Hide Hamburger lines on desktop completely */
+.navList a:hover::after { transform: scaleX(1); }
+
+/* Hamburger */
 .hamburger {
   display: none;
-  cursor: pointer;
-  background: none;
-  border: none;
   flex-direction: column;
-  gap: 6px;
-  padding: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--transition), border-color var(--transition);
 }
+
+.hamburger:hover {
+  background: var(--space-2);
+  border-color: var(--space-3);
+}
+
+.hamburger:active { transform: scale(0.94); }
 
 .bar {
   display: block;
-  width: 24px;
+  width: 22px;
   height: 2px;
-  background-color: var(--text-main);
+  background: var(--text-secondary);
+  border-radius: 2px;
+  /* springy easing so the morph feels lively */
   transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
+    transform 400ms cubic-bezier(0.68, -0.6, 0.32, 1.6),
+    opacity 200ms ease,
+    width 300ms ease,
+    background var(--transition);
 }
 
-/* ==========================================================================
-   3. Hero Section (Stark Typographic Void)
-   ========================================================================== */
-/* ==========================================================================
-   3. Hero Section (Two-Column Asymmetric Grid)
-   ========================================================================== */
-.simple-what-is {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 4rem;
-  align-items: center;
-  padding: 6rem 8%;
-  border-bottom: 1px solid var(--grid-border);
-  background: radial-gradient(circle at 8% 20%, #0f172a 0%, #020617 70%);
-}
+.hamburger:hover .bar { background: var(--blue-glow); }
 
-.hero-text-block {
-  text-align: left;
-}
+/* Morph the three bars into an X */
+.hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.active .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.hamburger.active .bar { background: var(--blue-glow); }
 
-.simple-what-is span {
-  display: inline-block;
-  font-size: 6.5rem;
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -0.05em;
-  text-transform: uppercase;
-}
+/* ════════════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════════════ */
 
-.simple-what-is span:nth-of-type(1) {
-  color: var(--text-main);
-}
-
-.simple-what-is span:nth-of-type(2) {
-  color: var(--accent-crimson);
-}
-
-.simple-what-is p {
-  max-width: 520px;
-  margin: 2.5rem 0;
-  color: var(--text-muted);
-  font-size: 1.2rem;
-  line-height: 1.65;
-}
-
-.simple-what-is button {
-  background-color: transparent;
-  color: var(--text-main);
-  border: 1px solid var(--text-main);
-  padding: 1rem 2.5rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.simple-what-is button:hover {
-  background-color: var(--text-main);
-  color: var(--bg-primary);
-}
-
-/* Fluid Video Container maintaining 16:9 ratio */
-.vidContainer {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%;
-  height: 0;
-  border: 1px solid var(--grid-border);
-}
-
-.vidContainer iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-/* ==========================================================================
-   4b. Cards Container (Deep Cosmic Modernist Grid Updates)
-   ========================================================================== */
-.mainContent {
-  min-height: 80vh;
-  background-color: var(--bg-primary);
-}
-
-.cardsContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2.5rem;
-  padding: 6rem 8%;
-  background-color: var(--bg-primary);
-}
-
-.card {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--grid-border);
-  padding: 2.5rem;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 2rem;
-  transition: var(--transition);
-  position: relative;
-}
-
-.card:hover {
-  background-color: rgba(15, 23, 42, 0.8);
-  border-color: rgba(56, 189, 248, 0.3);
-  transform: translateY(-2px);
-}
-
-.card h2 {
-  color: var(--text-main);
-  font-size: 1.15rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 2rem;
-  line-height: 1.4;
-}
-
-/* Equations Stack */
-.equationsList {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background: rgba(2, 6, 23, 0.4);
-  padding: 1.5rem;
-  border-radius: 4px;
-  border: 1px solid rgba(56, 189, 248, 0.03);
-}
-
-.equationLine {
-  color: var(--accent-blue) !important; 
-  font-family: "Fira Code", monospace !important; 
-  font-size: 1.15rem !important;
-  letter-spacing: 0.05em;
-  text-align: center;
-  word-break: break-all;
-}
-
-/* Card Bottom Controls */
-.cardFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid rgba(100, 116, 139, 0.1);
-  padding-top: 1.25rem;
-  margin-top: auto;
-}
-
-.gradeTag {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.cardLink {
-  color: var(--accent-crimson);
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border-bottom: 1px dashed transparent;
-  transition: var(--transition);
-}
-
-.cardLink:hover {
-  color: var(--text-main);
-  border-bottom-color: var(--text-main);
-}
-/* ==========================================================================
-   Search Input Styles (Deep Cosmic Minimalist)
-   ========================================================================== */
-.searchWrapper {
-  max-width: 600px;
-  margin: 4rem auto 0 auto;
-  padding: 0 8%;
-  width: 100%;
-}
-
-.searchInput {
-  width: 100%;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--grid-border);
-  color: var(--text-main);
-  padding: 1rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 4px;
-  outline: none;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  transition: var(--transition);
-}
-
-.searchInput:focus {
-  border-color: rgba(56, 189, 248, 0.5);
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.05);
-}
-
-.searchInput::placeholder {
-  color: var(--text-muted);
-  opacity: 0.7;
-}
-
-/* No Results Warning Box */
-.noResults {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 4rem 2rem;
-  border: 1px dashed rgba(100, 116, 139, 0.2);
-  border-radius: 4px;
-}
-
-.noResults p {
-  color: var(--text-muted);
-  font-size: 1rem;
-  letter-spacing: 0.02em;
-}
-
-/* Adjust top padding on container since search adds space */
-.cardsContainer {
-  padding-top: 3rem;
-}
-
-@media (max-width: 600px) {
-  .searchWrapper {
-    margin-top: 3rem;
-    padding: 0 6%;
-  }
-}
-/* Responsive Overrides for Cards */
-@media (max-width: 600px) {
-  .cardsContainer {
-    padding: 4rem 6%;
-    grid-template-columns: 1fr;
-  }
-  
-  .card {
-    padding: 2rem;
-  }
-}
-/* ==========================================================================
-   5. Responsive Structural Shifts
-   ========================================================================== */
-@media (max-width: 1100px) {
-  .simple-what-is span {
-    font-size: 5rem;
-  }
-
-  .simple-what-is {
-    gap: 2.5rem;
-  }
-}
-
-/* When screen gets tight, drop side-by-side and stack text cleanly over video */
-@media (max-width: 900px) {
-  .mainHeader {
-    padding: 1.5rem 6%;
-  }
-
-  .mainHeader nav ul {
-    gap: 2rem;
-  }
-
-  /* Transform hero column layout into single stacked layout */
-  .simple-what-is {
-    grid-template-columns: 1fr;
-    padding: 6rem 6% 4rem 6%;
-    gap: 3rem;
-  }
-
-  .simple-what-is span {
-    font-size: 4.5rem;
-  }
-
-  .container {
-    grid-template-columns: 1fr;
-  }
-
-  .what-is-newton-div,
-  .why-newton-div,
-  .what-is-here-div {
-    border-right: none;
-    border-bottom: 1px solid var(--grid-border);
-    padding: 4rem 6%;
-  }
-}
-
-@media (max-width: 600px) {
-  .mainHeader {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding: 1.5rem 6%;
-  }
-
-  .mainHeader nav ul {
-    width: 100%;
-    justify-content: space-between;
-    gap: 0;
-  }
-
-  .simple-what-is span {
-    display: block;
-    font-size: 3.5rem;
-  }
-
-  .simple-what-is button {
-    width: 100%;
-    text-align: center;
-  }
-
-  .what-is-newton-div,
-  .why-newton-div,
-  .what-is-here-div {
-    padding: 3.5rem 6%;
-  }
-}
-/* ==========================================================================
-   4. Content Grid (Infinite Structural Blocks)
-   ========================================================================== */
-.container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 0;
-  max-width: 100%;
-}
-
-.what-is-newton-div,
-.why-newton-div,
-.what-is-here-div {
-  padding: 5rem 10%;
-  border-right: 1px solid var(--grid-border);
-  border-bottom: 1px solid var(--grid-border);
-  background-color: transparent;
-  transition: var(--transition);
-}
-
-.what-is-here-div {
-  border-right: none;
-}
-
-/* Subtle reveal effect on hover without destroying the flat modernist layout */
-.what-is-newton-div:hover,
-.why-newton-div:hover,
-.what-is-here-div:hover {
-  background-color: rgba(15, 23, 42, 0.3);
-}
-
-.container h2 {
-  color: var(--text-main);
-  margin-bottom: 2rem;
-  font-size: 1.35rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.container p {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  line-height: 1.75;
-}
-/* ==========================================================================
-   6. Footer Styles (Modernist Baseline)
-   ========================================================================== */
 footer {
-  background-color: var(--bg-primary);
-  border-top: 1px solid var(--grid-border);
-  padding: 4rem 8%;
+  border-top: 1px solid var(--space-3);
+  background: linear-gradient(180deg, transparent, rgba(79, 125, 255, 0.04)), var(--space-1);
+  padding: 2.5rem 2rem;
 }
 
 .footerContainer {
+  max-width: 860px;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 3rem;
-  max-width: 100%;
+  flex-direction: column;
+  gap: 0.65rem;
+  align-items: center;
+  text-align: center;
 }
 
 .footerContainer p {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  line-height: 1.6;
-  max-width: 500px;
-  letter-spacing: -0.01em;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  max-width: 640px;
 }
 
 .footerContainer a {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--blue-glow);
   text-decoration: none;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--space-3);
+  border-radius: 999px;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+
+.footerContainer a:hover {
+  color: var(--text-primary);
+  border-color: var(--blue-mid);
+  background: var(--blue-subtle);
+}
+
+/* ════════════════════════════════════════════
+   MAIN PAGE — Hero
+   ════════════════════════════════════════════ */
+
+.simple-what-is {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 5.5rem 2rem 4rem;
+}
+
+.hero-text-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.title span {
+  font-family: var(--ff-display);
+  font-size: clamp(3rem, 8vw, 5.75rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--text-primary);
+}
+
+.hero-text-block p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 420px;
+  line-height: 1.75;
+}
+
+.hero-text-block a { text-decoration: none; }
+
+.hero-text-block button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  background: var(--grad-accent);
+  color: #fff;
+  font-family: var(--ff-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(79, 125, 255, 0.28);
+  transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+  width: fit-content;
+}
+
+.hero-text-block button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 28px rgba(79, 125, 255, 0.42);
+}
+
+.hero-text-block button:active { transform: translateY(0); }
+
+/* Video */
+.vidContainer {
+  flex: 1;
+  max-width: 560px;
+  position: relative;
+}
+
+.vidContainer::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-md);
+  padding: 1px;
+  background: var(--grad-accent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.ytVideo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  border: none;
+  display: block;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.45);
+}
+
+/* Info sections */
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1rem 2rem 5.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+.what-is-newton-div h2,
+.why-newton-div h2,
+.what-is-here-div h2 {
+  font-family: var(--ff-display);
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  position: relative;
   display: inline-block;
-  transition: var(--transition);
 }
 
-.footerContainer a span {
+.what-is-newton-div h2::after,
+.why-newton-div h2::after,
+.what-is-here-div h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--grad-accent);
+  border-radius: 3px;
+}
+
+.whatIs, .why, .whatIsHere {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+}
+
+/* ════════════════════════════════════════════
+   SECOND PAGE — Cards
+   ════════════════════════════════════════════ */
+
+.mainContent {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+  min-height: calc(100vh - 64px - 120px);
+}
+
+/* Search */
+.searchWrapper { margin-bottom: 2.25rem; }
+
+.searchInput {
+  width: 100%;
+  max-width: 480px;
+  padding: 0.7rem 1.1rem;
+  font-family: var(--ff-body);
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  background: var(--space-1);
+  border: 1px solid var(--space-3);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.searchInput::placeholder { color: var(--text-muted); }
+
+.searchInput:focus {
+  border-color: var(--blue-mid);
+  background: var(--space-2);
+  box-shadow: 0 0 0 4px rgba(79, 125, 255, 0.18);
+}
+
+/* Cards grid */
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.15rem;
+}
+
+.card {
+  position: relative;
+  background: var(--space-1);
+  border: 1px solid var(--space-3);
+  border-radius: var(--radius-md);
+  padding: 1.4rem 1.4rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  overflow: hidden;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--grad-accent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.card:hover {
+  border-color: var(--blue-mid);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-3px);
+}
+
+.card:hover::before { opacity: 1; }
+
+.card h2 {
+  font-family: var(--ff-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.6rem;
+  line-height: 1.35;
+}
+
+.equationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.equationLine {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-family: var(--ff-body);
+}
+
+/* Card footer */
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--space-3);
+}
+
+.gradeTag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.7rem;
+  background: var(--blue-subtle);
+  color: var(--blue-glow);
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--blue-press);
+}
+
+.cardLink {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--blue-glow);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.cardLink:hover { color: var(--cyan); }
+
+/* No results */
+.noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 1rem;
   color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-bottom: 1px dashed var(--text-muted);
-  padding-bottom: 2px;
-  transition: var(--transition);
+  font-size: 1.05rem;
 }
 
-/* Hover interaction */
-.footerContainer a:hover span {
-  color: var(--accent-blue);
-  border-bottom-color: var(--accent-blue);
+/* ── Skeleton ── */
+.cardSkeleton { pointer-events: none; }
+
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
 }
 
-/* ==========================================================================
-   Responsive Adjustments for Footer
-   ========================================================================== */
-@media (max-width: 900px) {
-  footer {
-    padding: 3rem 6%;
-  }
+.skeletonLine {
+  height: 13px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background: linear-gradient(
+    90deg,
+    var(--space-2) 25%,
+    var(--space-3) 50%,
+    var(--space-2) 75%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
 }
 
-@media (max-width: 600px) {
-  .footerContainer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2rem;
-  }
+.skeletonTitle { height: 17px; width: 65%; }
+.skeletonShort { width: 42%; }
+.skeletonTag   { height: 20px; width: 75px; border-radius: 999px; margin-bottom: 0; }
 
-  .footerContainer p {
-    font-size: 0.85rem;
-  }
+/* ════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════ */
 
-  .footerContainer a {
-    width: 100%;
-  }
-}
-/* ==========================================================================
-   5. Consolidated Responsive Fixes (Prevents Horizontal Scroll)
-   ========================================================================== */
+@media (max-width: 768px) {
+  .mainHeader { padding: 0 1.25rem; }
 
-/* Medium Screens & Small Laptops */
-@media (max-width: 1100px) {
-  .simple-what-is {
-    padding: 6rem 6%;
-    gap: 2rem;
-  }
+  .hamburger { display: flex; }
 
-  .simple-what-is span {
-    font-size: 5rem;
-  }
-
-  .container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .what-is-newton-div,
-  .why-newton-div,
-  .what-is-here-div {
-    padding: 4rem 5%;
-  }
-
-  footer {
-    padding: 4rem 6%;
-  }
-}
-
-/* Tablets & Landscape Mobile (Stack Layouts Elegantly) */
-@media (max-width: 900px) {
-  .mainHeader {
-    padding: 1.5rem 6%;
-  }
-
-  .mainHeader nav ul {
-    gap: 2rem;
-  }
-
-  /* Force Hero row layout instead of side-by-side columns */
-  .simple-what-is {
-    grid-template-columns: 1fr;
-    padding: 5rem 6%;
-    gap: 3rem;
-  }
-
-  .simple-what-is span {
-    font-size: 4.5rem;
-  }
-
-  .simple-what-is p {
-    max-width: 100%; /* Allows paragraph to fluidly wrap */
-  }
-
-  /* Structural shift to 1 column rows */
-  .container {
-    grid-template-columns: 1fr;
-  }
-
-  .what-is-newton-div,
-  .why-newton-div,
-  .what-is-here-div {
-    border-right: none;
-    border-bottom: 1px solid var(--grid-border);
-    padding: 4rem 6%;
-  }
-}
-
-/* Portrait Smartphones (Max Width Constraints) */
-@media (max-width: 600px) {
-  .mainHeader {
-    padding: 1rem 6%;
-    flex-direction: row; /* Keep logo & hamburger side-by-side */
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .hamburger {
-    display: flex; /* Display hamburger lines on mobile */
-  }
-
-  /* Morphing hamburger lines into an 'X' close icon */
-  .hamburger.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-  .hamburger.active .bar:nth-child(2) {
-    opacity: 0;
-  }
-  .hamburger.active .bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-  }
-
-  /* Absolute positioning turns this into a clean drop-down drawer */
   .navMenu {
+    /* always rendered so it can animate; hidden via transform/opacity */
+    display: flex;
     position: absolute;
-    top: 100%;
+    top: 64px;
     left: 0;
-    width: 100%;
-    background-color: var(--bg-secondary);
-    border-bottom: 1px solid var(--grid-border);
-    max-height: 0; /* Hidden by default */
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    right: 0;
+    background: rgba(17, 23, 38, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--space-3);
+    padding: 0.75rem 1.25rem 1rem;
+    z-index: 99;
+
+    /* closed state */
+    transform-origin: top center;
+    transform: translateY(-14px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    transition:
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 240ms ease,
+      visibility 0s linear 320ms;
   }
 
-  /* Reveal menu drawer smoothly when active state is true */
   .navMenu.open {
-    max-height: 250px;
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 260ms ease,
+      visibility 0s;
   }
 
   .navList {
-    flex-direction: column; /* Stack lists vertically instead of a squished row */
-    align-items: flex-start;
-    padding: 1.5rem 8%;
-    gap: 1.5rem;
+    flex-direction: column;
+    gap: 0.2rem;
+    width: 100%;
   }
 
   .navList a {
+    padding: 0.7rem 0.75rem;
     font-size: 1rem;
-    display: block;
-    width: 100%;
-    text-align: left; /* Align text elegantly to the left side */
+    /* per-link entrance: start shifted + faded */
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 260ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+      background var(--transition), color var(--transition);
   }
-  .title {
-    display: flex;
-    width: 100%; /* Ensures the title area spans the top */
-  }
+  .navList a::after { display: none; }
 
-  .vidContainer {
-    display: none;
-  }
-
-  .mainHeader nav {
-    width: 100%;
-  }
-
-  .mainHeader nav ul {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-
-  .mainHeader nav a {
-    font-size: 0.8rem;
-  }
+  /* staggered reveal once the menu is open */
+  .navMenu.open .navList a { opacity: 1; transform: translateY(0); }
+  .navMenu.open .navList li:nth-child(1) a { transition-delay: 80ms; }
+  .navMenu.open .navList li:nth-child(2) a { transition-delay: 130ms; }
+  .navMenu.open .navList li:nth-child(3) a { transition-delay: 180ms; }
+  .navMenu.open .navList li:nth-child(4) a { transition-delay: 230ms; }
+  .navMenu.open .navList li:nth-child(5) a { transition-delay: 280ms; }
+  .navMenu.open .navList li:nth-child(6) a { transition-delay: 330ms; }
 
   .simple-what-is {
-    padding: 4rem 6%;
-    gap: 2rem;
-  }
-
-  /* Safely wrap letters to prevent title breaking screen boundaries */
-  .simple-what-is span {
-    display: block;
-    font-size: 3.5rem;
-    word-break: break-word;
-  }
-
-  .simple-what-is p {
-    font-size: 1.1rem;
-    margin: 1.5rem 0;
-  }
-
-  .simple-what-is button {
-    width: 100%;
-    text-align: center;
-  }
-
-  .what-is-newton-div,
-  .why-newton-div,
-  .what-is-here-div {
-    padding: 3rem 6%;
-  }
-
-  .container h2 {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-  }
-
-  /* Safely stack footer elements vertically */
-  .footerContainer {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 2rem;
+    padding: 3rem 1.25rem 2.5rem;
+    gap: 2.25rem;
   }
 
-  .footerContainer p {
-    font-size: 0.85rem;
-    max-width: 100%;
-  }
+  .vidContainer { max-width: 100%; width: 100%; }
+  .hero-text-block p { max-width: 100%; }
+  .title span { font-size: clamp(2.4rem, 10vw, 3.5rem); }
 
-  .footerContainer a {
-    width: 100%;
-  }
+  .container { padding: 1rem 1.25rem 3.5rem; gap: 2.5rem; }
+  .mainContent { padding: 1.75rem 1rem 3rem; }
+  .searchInput { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .title span { font-size: 2.3rem; }
+  .cardsContainer { grid-template-columns: 1fr; }
+  .card { padding: 1.15rem; }
+  .simple-what-is { padding: 2rem 1rem; }
+  .container { padding: 0.75rem 1rem 2.5rem; }
+  .mainContent { padding: 1rem 0.75rem 2.5rem; }
+  footer { padding: 2rem 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .card:hover { transform: none; }
+  .hero-text-block button:hover { transform: none; }
 }

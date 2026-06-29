@@ -5,8 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    // allow requests from the ngrok forwarding host during development
-    allowedHosts: ['foil-bootie-quake.ngrok-free.dev'],
+    allowedHosts: ['recently-impressive-discipline-piece.trycloudflare.com'],
     proxy: {
       // Any request starting with /api will be sent to localhost:3000
       '/api': {
