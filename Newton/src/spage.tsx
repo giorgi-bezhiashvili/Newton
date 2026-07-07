@@ -1,44 +1,47 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import { type CardData } from "./types";
 import { useParams } from "react-router-dom";
+
+const BATCH_SIZE = 9;
+const SEARCH_DEBOUNCE_MS = 200;
 
 function RenderFraction({ text }: { text: string }) {
   let cleanText = text.trim();
   let multiplier = "";
 
   const parenFractionMatch = cleanText.match(/^\(([^)]+)\)\s*\*?\s*(.*)$/);
-  
+
   if (parenFractionMatch) {
-    cleanText = parenFractionMatch[1]; 
-    multiplier = parenFractionMatch[2]; 
+    cleanText = parenFractionMatch[1];
+    multiplier = parenFractionMatch[2];
   }
 
   if (cleanText.includes("/")) {
     const [numerator, denominator] = cleanText.split("/");
     return (
       <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-        <span style={{ 
-          display: 'inline-flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          verticalAlign: 'middle', 
+        <span style={{
+          display: 'inline-flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          verticalAlign: 'middle',
           padding: '0 6px',
           minWidth: '50px'
         }}>
-          <span style={{ 
-            borderBottom: '1px solid currentColor', 
-            padding: '2px 6px', 
+          <span style={{
+            borderBottom: '1px solid currentColor',
+            padding: '2px 6px',
             fontSize: '0.95em',
             textAlign: 'center',
             width: '100%'
           }}>
             {numerator.trim()}
           </span>
-          <span style={{ 
-            fontSize: '0.95em', 
-            paddingTop: '4px', 
+          <span style={{
+            fontSize: '0.95em',
+            paddingTop: '4px',
             textAlign: 'center',
             width: '100%'
           }}>
@@ -59,8 +62,8 @@ function ProcessEquation({ text }: { text: string }) {
 
   const match = text.match(/^([ა-ჰ\s]+)(.*)$/);
   if (match) {
-    prefix = match[1]; 
-    targetText = match[2]; 
+    prefix = match[1];
+    targetText = match[2];
   }
 
   if (targetText.includes("=")) {
@@ -83,91 +86,143 @@ function ProcessEquation({ text }: { text: string }) {
   );
 }
 
+// Wrapped in useMemo so the regex/split work only reruns when `text` actually changes,
+// not on every re-render of the parent card.
 function FormatEquation({ text }: { text: string }) {
-  if (text.includes(":")) {
-    const [labelText, equationText] = text.split(":");
-    
-    return (
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        gap: '8px',
-        width: '100%',
-        marginBottom: '12px' 
-      }}>
-        <span style={{ fontSize: '0.95em', color: '#a0aec0', textAlign: 'center' }}>
-          {labelText.trim()}:
-        </span>
-        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-          <ProcessEquation text={equationText} />
-        </div>
-      </div>
-    );
-  }
+  const content = useMemo(() => {
+    if (text.includes(":")) {
+      const [labelText, equationText] = text.split(":");
 
-  return <ProcessEquation text={text} />;
+      return (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '8px',
+          width: '100%',
+          marginBottom: '12px'
+        }}>
+          <span style={{ fontSize: '0.95em', color: '#a0aec0', textAlign: 'center' }}>
+            {labelText.trim()}:
+          </span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ProcessEquation text={equationText} />
+          </div>
+        </div>
+      );
+    }
+
+    return <ProcessEquation text={text} />;
+  }, [text]);
+
+  return content;
 }
 
 function SecondPage() {
   const [cards, setCards] = useState<CardData[]>([]);
+
+  // searchInput updates instantly (so typing feels responsive);
+  // searchQuery is the debounced value that actually drives filtering.
+  const [searchInput, setSearchInput] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [visibleCount, setVisibleCount] = useState<number>(BATCH_SIZE);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
   const { param } = useParams();
 
-  useEffect(() => {
-    if (!param) return;
+ useEffect(() => {
+  if (!param) return;
 
-    const fetchCards = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(`http://localhost:3000/api/${param}`, {
-          method: "GET",
-          headers: {
-            "ngrok-skip-browser-warning": "true", 
-            "Content-Type": "application/json",
-          },
-        });
+  const fetchCards = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`http://localhost:3000/api/${param}`, {
+        method: "GET",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+          "Content-Type": "application/json",
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data: CardData[] = await response.json();
-        setCards(data);
-      } catch (error) {
-        console.error("Error fetching cards:", error);
-      } finally {
-        setIsLoading(false);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
 
-    fetchCards();
-  }, [param]);
+      const data: CardData[] = await response.json();
+      setCards(data);
+      setVisibleCount(BATCH_SIZE); // Reset count here when a new route data loads!
+    } catch (error) {
+      console.error("Error fetching cards:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  const filteredCards = cards.filter((card) => {
+  fetchCards();
+}, [param]);
+
+  // Debounce: wait until the user pauses typing for 200ms before updating
+  // the value that actually triggers filtering.
+// Debounce: wait until the user pauses typing for 200ms before updating
+// the value that actually triggers filtering.
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    setSearchQuery(searchInput);
+    setVisibleCount(BATCH_SIZE); // Reset count here when search changes!
+  }, SEARCH_DEBOUNCE_MS);
+
+  return () => clearTimeout(timeout);
+}, [searchInput]);
+
+  // Only recompute the filtered list when the cards or the debounced query change,
+  // not on every render.
+  const filteredCards = useMemo(() => {
     const searchLower = searchQuery.toLowerCase();
     const searchClean = searchLower.replace(/\s+/g, "");
 
-    const matchTopic = card.topic.toLowerCase().includes(searchLower);
-    const matchGrade = card.grade.toString().includes(searchLower);
+    return cards.filter((card) => {
+      const matchTopic = card.topic.toLowerCase().includes(searchLower);
+      const matchGrade = card.grade.toString().includes(searchLower);
 
-    const equationString = Array.isArray(card.equation)
-      ? card.equation.join(" ").toLowerCase()
-      : String(card.equation).toLowerCase();
+      const equationString = Array.isArray(card.equation)
+        ? card.equation.join(" ").toLowerCase()
+        : String(card.equation).toLowerCase();
 
-    const equationClean = equationString.replace(/\s+/g, "");
+      const equationClean = equationString.replace(/\s+/g, "");
 
-    return (
-      matchTopic ||
-      matchGrade ||
-      equationString.includes(searchLower) ||
-      equationClean.includes(searchClean)
+      return (
+        matchTopic ||
+        matchGrade ||
+        equationString.includes(searchLower) ||
+        equationClean.includes(searchClean)
+      );
+    });
+  }, [cards, searchQuery]);
+
+
+  useEffect(() => {
+    const node = sentinelRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, filteredCards.length));
+        }
+      },
+      { rootMargin: "200px" } // start loading a bit before it's actually on screen
     );
-  });
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [filteredCards.length]);
+
+  const visibleCards = filteredCards.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredCards.length;
 
   return (
-    <>
+    <div className="space-page">
       <Header />
       <main className="mainContent">
         <div className="searchWrapper">
@@ -175,8 +230,8 @@ function SecondPage() {
             type="text"
             className="searchInput"
             placeholder="ძებნა (მაგ: თემა, კლასი)..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
 
@@ -195,7 +250,7 @@ function SecondPage() {
               </div>
             ))
           ) : filteredCards.length > 0 ? (
-            filteredCards.map((card) => (
+            visibleCards.map((card) => (
               <div key={card._id} className="card">
                 <div>
                   <h2>{card.topic}</h2>
@@ -229,9 +284,24 @@ function SecondPage() {
             </div>
           )}
         </div>
+
+        {hasMore && (
+          <div ref={sentinelRef} className="loadMoreSentinel">
+            <div className="card cardSkeleton">
+              <div>
+                <div className="skeletonLine skeletonTitle" />
+                <div className="skeletonLine" />
+                <div className="skeletonLine skeletonShort" />
+              </div>
+              <div className="cardFooter">
+                <div className="skeletonLine skeletonTag" />
+              </div>
+            </div>
+          </div>
+        )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 
