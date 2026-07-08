@@ -8,11 +8,11 @@ function middle() {
             <span>NEWTON</span>
           </div>
           <p>
-            ისწავლე ფიზიკა, მარტივად ახსნილი თემებით , ორგანიზებული გაკვეთილებით
-            და სკოლის პროექტებით
+            ისწავლე ფიზიკა, მარტივად ახსნილი თემებით , ორგანიზებული
+            გაკვეთილებით, სკოლის პროექტებით, ფორმულებით და დავალებებით.
           </p>
-          <a href="/projects">
-            <button type="button">პროექტები ➜</button>
+          <a href="#start-learning">
+            <button type="button">დაიწყე სწავლა ➜</button>
           </a>
         </div>
 
@@ -32,7 +32,6 @@ function middle() {
         </div>
       </div>
 
-      {}
       <div className="container">
         <div className="what-is-newton-div">
           <h2>რა არის ნიუტონი</h2>
@@ -82,6 +81,34 @@ function middle() {
             ყველაფერი, რაც გჭირდებათ სწავლისთვის, პრაქტიკისთვის და შექმნისთვის,
             აქ არის.
           </p>
+        </div>
+
+        <div className="resource-nav-div" id="start-learning">
+          <h2>დაიწყე სწავლა</h2>
+          <div className="resourceGrid">
+            <a href="/formulas" className="resourceCard">
+              <h3>ფორმულები</h3>
+              <p>
+                ფიზიკის ფორმულების სრული კრებული, კლასების მიხედვით დაჯგუფებული.
+              </p>
+              <span className="resourceLink">იხილეთ ფორმულები ➜</span>
+            </a>
+
+            <a href="/assignments" className="resourceCard">
+              <h3>დავალებები</h3>
+              <p>პრაქტიკული ამოცანები საკუთარი ცოდნის შესამოწმებლად.</p>
+              <span className="resourceLink">იხილეთ დავალებები ➜</span>
+            </a>
+
+            <a href="/projects" className="resourceCard">
+              <h3>პროექტები</h3>
+              <p>
+                სტუდენტების მიერ შექმნილი რეალური ფიზიკის პროექტები,
+                შთაგონებისთვის.
+              </p>
+              <span className="resourceLink">იხილეთ პროექტები ➜</span>
+            </a>
+          </div>
         </div>
       </div>
     </main>

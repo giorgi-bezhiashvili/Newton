@@ -27,7 +27,7 @@ function Header() {
           <li><a href="/">მთავარი</a></li>
           <li><a href="/formulas">ფორმულები</a></li>
           <li><a href="/projects">პროექტები</a></li>
-          <li><a href="/assigments">დავალებები</a></li>
+          <li><a href="/assignments">დავალებები</a></li>
         </ul>
       </nav>
     </header>

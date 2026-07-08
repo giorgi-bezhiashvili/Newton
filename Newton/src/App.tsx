@@ -1,10 +1,12 @@
-// src/App.jsx
+// src/App.tsx
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const MainPage = lazy(() => import('./mainPage'));
 
-const Resource = lazy(() => import('./spage')); 
+const FormulasPage = lazy(() => import('./FormulaPage'));
+const AssignmentsPage = lazy(() => import('./AssignmentsPage'));
+const ProjectsPage = lazy(() => import('./ProjectsPage'));
 
 const NotFound = () => (
   <div
@@ -29,8 +31,11 @@ export default function App() {
       <Suspense fallback={<div>Loading page...</div>}>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          
-          <Route path="/:param" element={<Resource />} />          
+
+          <Route path="/formulas" element={<FormulasPage />} />
+          <Route path="/assignments" element={<AssignmentsPage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
