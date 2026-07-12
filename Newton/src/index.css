@@ -68,6 +68,8 @@ html {
 
 * {
   box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
 }
 
 html {
@@ -335,7 +337,16 @@ img {
    ========================================================================== */
 
 @media (max-width: 768px) {
- 
+ :root {
+    --header-h: 64px; 
+  }
+
+  .mainHeader {
+    position: sticky;
+    padding: 0px;
+    height: 64px;
+    height: var(--header-h); 
+  }
   .resourceGrid {
     grid-template-columns: 1fr;
   }
@@ -371,10 +382,7 @@ img {
     border-bottom: 1px solid var(--border);
   }
 
-  .mainHeader {
-    padding: 0 20px;
-    height: 64px;
-  }
+
 
   .imgLogo {
     height: 36px;

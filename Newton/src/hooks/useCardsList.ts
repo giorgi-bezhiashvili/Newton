@@ -30,7 +30,6 @@ export function useCardsList<T extends { _id: string; grade: number }>({
         const response = await fetch(`https://newton-theta-bice.vercel.app/api/${endpoint}`, {
           method: "GET",
           headers: {
-            "ngrok-skip-browser-warning": "true",
             "Content-Type": "application/json",
           },
         });
