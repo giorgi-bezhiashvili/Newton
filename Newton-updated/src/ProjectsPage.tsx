@@ -9,6 +9,10 @@ function ProjectsPage() {
   const { isAuthenticated } = useAuth();
 
   return (
+    <>
+    <title>პროექტები — Newton</title>
+      <meta name="description" content="სტუდენტების მიერ გაკეთებული პროექტები ფიზიკის სხვადსხვა თემებზე" />
+
     <CardsPage<ProjectData>
       endpoint="projects"
       renderCard={(card, refetch) => <ProjectCard card={card} onChanged={refetch} />}
@@ -20,6 +24,7 @@ function ProjectsPage() {
         (card.projectAuthor?.toLowerCase().includes(searchLower) ?? false)
       }
     />
+    </>
   );
 }
 

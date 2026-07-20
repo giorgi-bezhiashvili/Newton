@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import PageLoader from './components/PageLoader';
 
 const MainPage = lazy(() => import('./mainPage'));
 const FormulasPage = lazy(() => import('./FormulaPage'));
@@ -30,7 +31,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Suspense fallback={<div>Loading page...</div>}>
+        <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/formulas" element={<FormulasPage />} />

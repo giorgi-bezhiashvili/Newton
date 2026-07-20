@@ -9,6 +9,10 @@ function AssignmentsPage() {
   const { isAuthenticated } = useAuth();
 
   return (
+   <>
+   <title>დავალებები — Newton</title>
+      <meta name="description" content="დავალებები ფიზიკაში თეორიული ცოდნის პრაქტიკაში გამოყენებისთვის" />
+
     <CardsPage<AssignmentData>
       endpoint="assignments"
       renderCard={(card, refetch) => <AssignmentCard card={card} onChanged={refetch} />}
@@ -19,6 +23,7 @@ function AssignmentsPage() {
         card.assignments.some((a) => a.toLowerCase().includes(searchLower))
       }
     />
+    </> 
   );
 }
 

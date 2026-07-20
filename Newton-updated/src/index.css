@@ -313,7 +313,139 @@ img {
   font-weight: 700;
   color: var(--amber);
 }
+/* ==========================================================================
+   Footer
+   ========================================================================== */
 
+.footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.footerContainer {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 32px clamp(20px, 5vw, 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.footerBrand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footerCopyright {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--amber);
+  margin: 0;
+}
+
+.footerTagline {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-faint);
+  max-width: 60ch;
+  margin: 0;
+}
+
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footerLink {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  transition: color 0.2s var(--ease);
+}
+
+.footerLink:hover {
+  color: var(--amber-bright);
+}
+
+.footerLinkDev {
+  color: var(--text-faint);
+}
+
+@media (min-width: 640px) {
+  .footerContainer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+/* ==========================================================================
+   Page loader (route-level Suspense fallback)
+   ========================================================================== */
+
+.pageLoader {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: var(--bg);
+}
+
+.pageLoaderSpinner {
+  display: flex;
+  gap: 8px;
+}
+
+.pageLoaderSpinner span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--amber);
+  animation: pageLoaderBounce 1s var(--ease) infinite;
+}
+
+.pageLoaderSpinner span:nth-child(2) {
+  animation-delay: 0.15s;
+  background: var(--ember);
+}
+
+.pageLoaderSpinner span:nth-child(3) {
+  animation-delay: 0.3s;
+  background: var(--amber-dim);
+}
+
+@keyframes pageLoaderBounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+.pageLoaderText {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pageLoaderSpinner span {
+    animation: none;
+    opacity: 0.8;
+  }
+}
 /* ==========================================================================
    Responsive — tablet (≤1024px)
    ========================================================================== */
@@ -426,14 +558,72 @@ img {
     font-size: 1.35rem;
   }
 
-  /* ---- footer ---- */
-  .footerContainer {
+ /* ---- footer ---- */
+.footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: var(--color-charcoal, #1c1a17);
+}
+
+.footerContainer {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
-    padding: 28px 20px;
-  }
+    gap: 20px;
+    padding: 32px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
+.footerBrand {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.footerCopyright {
+    font-family: "DM Serif Display", serif;
+    font-size: 15px;
+    color: var(--color-amber, #d9a441);
+}
+
+.footerTagline {
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.65);
+    max-width: 480px;
+}
+
+.footerLinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footerLink {
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footerLink:hover {
+    color: var(--color-amber, #d9a441);
+}
+
+.footerLinkDev {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* wider screens: brand left, links right */
+@media (min-width: 640px) {
+    .footerContainer {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
   /* ---- resource / space page ---- */
   .mainContent {
     padding: 24px 20px 80px;
