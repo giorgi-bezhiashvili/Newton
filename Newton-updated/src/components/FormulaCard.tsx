@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { FormulaData } from "../types";
 import { useAuth } from "../contexts/AuthContext";
 import { patchWithAuth, deleteWithAuth } from "../api";
+import type { ReactNode } from "react";
 
 const GRADES = [7, 8, 9, 10, 11, 12];
 
@@ -62,6 +63,128 @@ function RenderFraction({ text }: { text: string }) {
   );
 }
 
+// ---- Custom LaTeX-ish renderer (no external dependency) ----
+// Supports: \frac{a}{b}, \sqrt{a}, \cdot, \times, _{sub} / _x, ^{sup} / ^x
+// Falls back to plain text for anything else.
+
+function isLatexLike(text: string): boolean {
+  return /\\(frac|sqrt|cdot|times)/.test(text) || /[_^]/.test(text);
+}
+
+// Reads a {...} group starting at index i (balanced braces), or if there's
+// no brace, reads just the single next character as the argument.
+function readGroup(input: string, start: number): [string, number] {
+  let i = start;
+  while (input[i] === " ") i++;
+  if (input[i] === "{") {
+    let depth = 1;
+    let j = i + 1;
+    while (j < input.length && depth > 0) {
+      if (input[j] === "{") depth++;
+      else if (input[j] === "}") depth--;
+      j++;
+    }
+    return [input.slice(i + 1, j - 1), j];
+  }
+  return [input[i] ?? "", i + 1];
+}
+
+function parseLatexNodes(input: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  let i = 0;
+  let key = 0;
+
+  while (i < input.length) {
+    const ch = input[i];
+
+    if (ch === "\\") {
+      const cmdMatch = input.slice(i).match(/^\\([a-zA-Z]+)/);
+      if (cmdMatch) {
+        const cmd = cmdMatch[1];
+        i += cmdMatch[0].length;
+
+        if (cmd === "frac") {
+          const [num, afterNum] = readGroup(input, i);
+          const [den, afterDen] = readGroup(input, afterNum);
+          nodes.push(
+            <span key={key++} style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", verticalAlign: "middle", padding: "0 6px" }}>
+              <span style={{ borderBottom: "1px solid currentColor", padding: "0 4px", fontSize: "0.9em" }}>
+                {parseLatexNodes(num)}
+              </span>
+              <span style={{ fontSize: "0.9em", paddingTop: "2px" }}>
+                {parseLatexNodes(den)}
+              </span>
+            </span>
+          );
+          i = afterDen;
+          continue;
+        }
+
+        if (cmd === "sqrt") {
+          const [content, afterContent] = readGroup(input, i);
+          nodes.push(
+            <span key={key++} style={{ display: "inline-flex", alignItems: "flex-start" }}>
+              <span style={{ marginRight: "1px" }}>√</span>
+              <span style={{ borderTop: "1px solid currentColor", paddingTop: "1px" }}>
+                {parseLatexNodes(content)}
+              </span>
+            </span>
+          );
+          i = afterContent;
+          continue;
+        }
+
+        if (cmd === "cdot" || cmd === "times") {
+          nodes.push(<span key={key++} style={{ padding: "0 2px" }}>·</span>);
+          continue;
+        }
+
+        if (cmd === "text") {
+          const [content, afterContent] = readGroup(input, i);
+          nodes.push(<span key={key++}>{content}</span>);
+          i = afterContent;
+          continue;
+        }
+
+        // Unknown command — just show its name without the backslash
+        nodes.push(<span key={key++}>{cmd}</span>);
+        continue;
+      }
+      i++; // stray backslash, skip
+      continue;
+    }
+
+    if (ch === "_") {
+      const [sub, after] = readGroup(input, i + 1);
+      nodes.push(<sub key={key++} style={{ fontSize: "0.75em" }}>{parseLatexNodes(sub)}</sub>);
+      i = after;
+      continue;
+    }
+
+    if (ch === "^") {
+      const [sup, after] = readGroup(input, i + 1);
+      nodes.push(<sup key={key++} style={{ fontSize: "0.75em" }}>{parseLatexNodes(sup)}</sup>);
+      i = after;
+      continue;
+    }
+
+    if (ch === "{") {
+      const [content, after] = readGroup(input, i);
+      nodes.push(<span key={key++}>{parseLatexNodes(content)}</span>);
+      i = after;
+      continue;
+    }
+
+    // Plain text run until the next special character
+    let j = i;
+    while (j < input.length && !"\\_^{".includes(input[j])) j++;
+    nodes.push(<span key={key++}>{input.slice(i, j)}</span>);
+    i = j;
+  }
+
+  return nodes;
+}
+
 function ProcessEquation({ text }: { text: string }) {
   let prefix = "";
   let targetText = text;
@@ -70,6 +193,17 @@ function ProcessEquation({ text }: { text: string }) {
   if (match) {
     prefix = match[1];
     targetText = match[2];
+  }
+
+  if (isLatexLike(targetText)) {
+    return (
+      <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+        {prefix && <span style={{ color: "#a0aec0", marginRight: "4px" }}>{prefix.trim()}</span>}
+        <span style={{ display: "inline-flex", alignItems: "center", fontStyle: "italic" }}>
+          {parseLatexNodes(targetText.trim())}
+        </span>
+      </span>
+    );
   }
 
   if (targetText.includes("=")) {

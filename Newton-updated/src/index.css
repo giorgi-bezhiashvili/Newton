@@ -560,8 +560,8 @@ img {
 
  /* ---- footer ---- */
 .footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    background-color: var(--color-charcoal, #1c1a17);
+    border-top: 1px solid var(--border);
+    background: var(--bg-elevated);
 }
 
 .footerContainer {

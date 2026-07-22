@@ -23,7 +23,7 @@ export function GradeFilter({ value, onChange, options = [7, 8,9,10,11,12] }: Gr
             className={`gradeFilterBtn ${value === grade ? "active" : ""}`}
             onClick={() => onChange(grade)}
           >
-            {grade}-ე კლასი
+            მე-{grade} კლასი
           </button>
         ))}
       </div>
