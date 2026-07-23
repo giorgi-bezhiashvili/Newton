@@ -69,7 +69,7 @@ export function AddProjectForm({ onAdded }: { onAdded: () => void }) {
         <form className="addCardForm" onSubmit={handleSubmit}>
           <input className="searchInput" placeholder="თემა" value={topic} onChange={(e) => setTopic(e.target.value)} required />
           <textarea className="searchInput addCardTextarea" placeholder="აღწერა" value={description} onChange={(e) => setDescription(e.target.value)} required />
-          <input className="searchInput" placeholder="ავტორი (არასავალდებულო)" value={projectAuthor} onChange={(e) => setProjectAuthor(e.target.value)} />
+          <input className="searchInput" placeholder="ავტორი" value={projectAuthor} onChange={(e) => setProjectAuthor(e.target.value)} />
 
           <div className="addCardRow">
             <select className="searchInput" value={grade} onChange={(e) => setGrade(Number(e.target.value))}>
