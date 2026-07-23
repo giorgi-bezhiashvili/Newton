@@ -163,7 +163,34 @@ img {
     scroll-behavior: auto !important;
   }
 }
+.passwordField {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
 
+.passwordField .searchInput {
+  width: 100%;
+  padding-right: 40px; /* room for the icon */
+}
+
+.passwordToggleBtn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  opacity: 0.7;
+  padding: 0;
+}
+
+.passwordToggleBtn:hover {
+  opacity: 1;
+}
 /* ==========================================================================
    Header / nav
    ========================================================================== */
